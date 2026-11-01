@@ -13,7 +13,7 @@
     {
       "binding": "DB",
       "database_name": "jeezydropz-content",
-      "database_id": "REPLACE_WITH_YOUR_DATABASE_ID"
+      "database_id": "b2f60bcd-f0ad-4198-b683-5ebe1d418c7b"
     }
   ],
   "triggers": {
