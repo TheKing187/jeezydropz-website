@@ -580,5 +580,106 @@ document.getElementById("year").textContent =
     new Date().getFullYear();
 </script>
 
+<section id="latest-updates" style="padding:40px 20px; max-width:1200px; margin:auto;">
+  <h2 style="color:#00cfff; text-align:center; font-size:28px;">
+    Latest JeezyDropz Updates
+  </h2>
+
+  <p style="text-align:center; color:#aaa;">
+    Gaming news, releases, playtests and Web3 updates.
+  </p>
+
+  <div id="articles-container" style="
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    margin-top:30px;">
+    <p style="color:#aaa;">Loading latest updates...</p>
+  </div>
+</section>
+
+<script>
+async function loadJeezyArticles() {
+  const container = document.getElementById("articles-container");
+
+  try {
+    const response = await fetch("/api/articles");
+
+    if (!response.ok) throw new Error("Could not load articles");
+
+    const articles = await response.json();
+
+    if (!articles.length) {
+      container.innerHTML =
+        '<p style="color:#aaa;">New JeezyDropz updates coming soon!</p>';
+      return;
+    }
+
+    container.innerHTML = articles.map(article => `
+      <article style="
+        background:#101d35;
+        border:1px solid #087cff;
+        border-radius:12px;
+        padding:20px;
+        color:white;">
+
+        <small style="color:#00cfff;">
+          ${escapeHTML(article.category || "Latest Updates")}
+        </small>
+
+        <h3 style="margin:12px 0;color:white;">
+          ${escapeHTML(article.title)}
+        </h3>
+
+        <p style="color:#bbb;line-height:1.6;">
+          ${escapeHTML(article.summary || "")}
+        </p>
+
+        <small style="color:#888;">
+          ${escapeHTML(article.source_name || "JeezyDropz")}
+        </small>
+
+        ${article.url ? `
+          <p>
+            <a href="${safeURL(article.url)}"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="color:#00cfff;">
+              Read more →
+            </a>
+          </p>` : ""}
+      </article>
+    `).join("");
+
+  } catch (error) {
+    container.innerHTML =
+      '<p style="color:#ff7777;">Updates are temporarily unavailable.</p>';
+  }
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function safeURL(value) {
+  try {
+    const url = new URL(value, window.location.origin);
+    return ["https:", "http:"].includes(url.protocol)
+      ? escapeHTML(url.href)
+      : "#";
+  } catch {
+    return "#";
+  }
+}
+
+loadJeezyArticles();
+</script>
+
 </body>
 </html>
