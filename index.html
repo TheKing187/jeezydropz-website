@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="JeezyDropz — Gaming, Web3, upcoming releases and daily alpha.">
+<title>JeezyDropz | Gaming & Web3 Hub</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #050b16;
+    color: #f1f6ff;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.container {
+    width: 90%;
+    max-width: 1160px;
+    margin: auto;
+}
+
+header {
+    background: rgba(5,11,22,0.95);
+    border-bottom: 1px solid #17345a;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav {
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 900;
+    color: #fff;
+}
+
+.logo span {
+    color: #31d7ff;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+}
+
+nav ul a:hover {
+    color: #31d7ff;
+}
+
+.button {
+    display: inline-block;
+    padding: 12px 20px;
+    background: linear-gradient(110deg,#087bff,#12b9f4);
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+}
+
+.hero {
+    padding: 90px 0;
+    background: radial-gradient(circle at 80% 30%,#102e55,transparent 40%);
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.eyebrow {
+    color: #31d7ff;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+h1 {
+    font-size: clamp(45px,7vw,85px);
+    line-height: 1;
+    margin: 25px 0;
+}
+
+.highlight {
+    color: #31d7ff;
+    text-shadow: 0 0 30px #087bff;
+}
+
+.hero p {
+    color: #aebfd8;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.secondary-button {
+    display: inline-block;
+    padding: 12px 20px;
+    border: 1px solid #31d7ff;
+    border-radius: 8px;
+    color: #31d7ff;
+    font-weight: bold;
+}
+
+.hero-art {
+    min-height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #31d7ff;
+    border-radius: 20px;
+    background: linear-gradient(145deg,#102c53,#07101f);
+    box-shadow: 0 0 50px rgba(8,123,255,.2);
+}
+
+.hero-art span {
+    font-size: 130px;
+    font-weight: 900;
+    color: #31d7ff;
+    text-shadow: 0 0 50px #087bff;
+}
+
+section {
+    padding: 65px 0;
+}
+
+.section-title {
+    margin-bottom: 30px;
+}
+
+.section-title small {
+    color: #31d7ff;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.section-title h2 {
+    font-size: 35px;
+    margin: 10px 0;
+}
+
+.section-title p {
+    color: #9bafcb;
+    line-height: 1.6;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+}
+
+.card {
+    background: #0b1527;
+    border: 1px solid #17345a;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    border-color: #31d7ff;
+    box-shadow: 0 0 25px rgba(8,123,255,.2);
+}
+
+.card-image {
+    height: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,#123e75,#071323);
+    color: #31d7ff;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-content small {
+    color: #31d7ff;
+    text-transform: uppercase;
+}
+
+.card-content h3 {
+    margin: 12px 0;
+}
+
+.card-content p {
+    color: #9bafcb;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
+
+.tag {
+    display: inline-block;
+    color: #31d7ff;
+    border: 1px solid #1b6488;
+    border-radius: 20px;
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.panel {
+    background: linear-gradient(135deg,#102c53,#091528);
+    border: 1px solid #17345a;
+    border-radius: 15px;
+    padding: 30px;
+}
+
+.panel h3 {
+    font-size: 24px;
+    margin: 15px 0;
+}
+
+.panel p {
+    color: #9bafcb;
+    line-height: 1.7;
+}
+
+.video-box {
+    min-height: 250px;
+    border: 1px solid #31d7ff;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle,#102e55,#050b16);
+    text-align: center;
+    padding: 25px;
+}
+
+.play-button {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: #087bff;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+.video-box p {
+    color: #9bafcb;
+    margin-top: 10px;
+}
+
+.newsletter {
+    background: linear-gradient(110deg,#0c3970,#087bff,#12b9f4);
+    padding: 35px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.newsletter p {
+    margin-top: 10px;
+}
+
+.newsletter a {
+    background: #06152b;
+    padding: 13px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+footer {
+    border-top: 1px solid #17345a;
+    padding: 30px 0;
+    color: #9bafcb;
+    font-size: 14px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.socials {
+    display: flex;
+    gap: 20px;
+}
+
+.socials a:hover {
+    color: #31d7ff;
+}
+
+@media(max-width:800px) {
+    .hero-content,
+    .cards,
+    .panels {
+        grid-template-columns: 1fr;
+    }
+
+    nav ul {
+        gap: 12px;
+        font-size: 13px;
+        flex-wrap: wrap;
+    }
+
+    .newsletter {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media(max-width:500px) {
+    nav {
+        flex-direction: column;
+        padding: 18px 0;
+    }
+
+    nav ul {
+        justify-content: center;
+    }
+
+    .hero {
+        padding: 55px 0;
+    }
+
+    .hero-art {
+        min-height: 250px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="container">
+        <nav>
+            <a href="#home" class="logo">JEEZY<span>DROPZ</span></a>
+
+            <ul>
+                <li><a href="#games">Gaming</a></li>
+                <li><a href="#web3">Web3 & Alpha</a></li>
+                <li><a href="#videos">Videos</a></li>
+                <li><a href="#updates">Updates</a></li>
+            </ul>
+
+            <a href="#games" class="button">Explore Drops ↗</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+
+<div class="hero" id="home">
+    <div class="container hero-content">
+
+        <div>
+            <div class="eyebrow">Gaming • Web3 • Daily Alpha</div>
+
+            <h1>
+                FIND YOUR<br>
+                <span class="highlight">NEXT DROP.</span>
+            </h1>
+
+            <p>
+                Your hub for upcoming games, fresh trailers,
+                playtests, free-game alerts and Web3 opportunities.
+                Discover what's next — and don't miss the drop.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="#games" class="button">Explore Gaming</a>
+                <a href="#web3" class="secondary-button">Discover Web3 Alpha</a>
+            </div>
+        </div>
+
+        <div class="hero-art">
+            <span>J</span>
+        </div>
+
+    </div>
+</div>
+
+<section id="games">
+    <div class="container">
+
+        <div class="section-title">
+            <small>On The Radar</small>
+            <h2>Gaming Spotlight</h2>
+            <p>Upcoming releases, demos and playtests worth checking out.</p>
+        </div>
+
+        <div class="cards">
+
+            <article class="card">
+                <div class="card-image">SOULFRAME</div>
+                <div class="card-content">
+                    <small>Fantasy Action RPG</small>
+                    <h3>Soulframe</h3>
+                    <p>
+                        Step into a mysterious fantasy world,
+                        explore its secrets and follow the latest
+                        development updates.
+                    </p>
+                    <span class="tag">Coming Soon</span>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-image">NEW RELEASES</div>
+                <div class="card-content">
+                    <small>Gaming News</small>
+                    <h3>Upcoming Game Releases</h3>
+                    <p>
+                        Discover new announcements, trailers,
+                        release dates and games arriving on PC.
+                    </p>
+                    <span class="tag">Explore Games</span>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-image">PLAYTEST</div>
+                <div class="card-content">
+                    <small>Get In Early</small>
+                    <h3>Demos & Playtests</h3>
+                    <p>
+                        Find opportunities to try games before launch
+                        and get involved with new communities.
+                    </p>
+                    <span class="tag">Opportunities</span>
+                </div>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<section id="web3">
+    <div class="container">
+
+        <div class="section-title">
+            <small>Beyond The Game</small>
+            <h2>Web3 & Daily Alpha</h2>
+            <p>
+                A place for project discoveries, airdrops and on-chain gaming.
+            </p>
+        </div>
+
+        <div class="panels">
+
+            <div class="panel">
+                <small class="eyebrow">JeezyDropz Radar</small>
+                <h3>Web3 Opportunities</h3>
+                <p>
+                    Track interesting projects, campaign announcements,
+                    testnets and community opportunities. Always verify
+                    official links and eligibility before participating.
+                </p>
+            </div>
+
+            <div class="panel">
+                <small class="eyebrow">Gaming Meets Web3</small>
+                <h3>On-Chain Gaming</h3>
+                <p>
+                    Discover blockchain games, ecosystem updates and
+                    projects bringing new ideas to the gaming space.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section id="videos">
+    <div class="container">
+
+        <div class="section-title">
+            <small>Watch & Play</small>
+            <h2>Latest Videos</h2>
+            <p>
+                Gameplay, walkthroughs, trailers and first looks.
+            </p>
+        </div>
+
+        <div class="video-box">
+            <div class="play-button">▶</div>
+            <h3>JeezyGamezz on YouTube</h3>
+            <p>Your latest videos and gameplay uploads will appear here.</p>
+        </div>
+
+    </div>
+</section>
+
+<section id="updates">
+    <div class="container">
+
+        <div class="section-title">
+            <small>Stay Connected</small>
+            <h2>Follow The Drops</h2>
+            <p>
+                Follow JeezyDropz for updates and JeezyGamezz for gaming content.
+            </p>
+        </div>
+
+        <div class="newsletter">
+            <div>
+                <h2>Never Miss What's Next.</h2>
+                <p>
+                    Game announcements, new videos and Web3 discoveries.
+                </p>
+            </div>
+
+            <a href="https://x.com/JeezyDropz" target="_blank">
+                Follow JeezyDropz ↗
+            </a>
+        </div>
+
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="container footer-content">
+        <p>© <span id="year"></span> JeezyDropz. Gaming • Web3 • Daily Alpha.</p>
+
+        <div class="socials">
+            <a href="https://x.com/JeezyDropz" target="_blank">X / Twitter</a>
+            <a href="https://www.youtube.com/@JeezyGamezz" target="_blank">YouTube</a>
+            <a href="#home">Back to Top ↑</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+</script>
+
+</body>
+</html>
