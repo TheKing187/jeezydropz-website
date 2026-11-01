@@ -33,11 +33,37 @@ export default {
       return Response.json(results);
     }
 
+    // Secure manual collection endpoint
+    if (url.pathname === "/api/collect") {
+      if (request.method !== "POST") {
+        return Response.json(
+          { success: false, message: "POST required" },
+          { status: 405 }
+        );
+      }
+
+      const token = request.headers.get("X-Collect-Secret");
+
+      if (!env.COLLECT_SECRET || token !== env.COLLECT_SECRET) {
+        return Response.json(
+          { success: false, message: "Unauthorized" },
+          { status: 401 }
+        );
+      }
+
+      await collectArticles(env);
+
+      return Response.json({
+        success: true,
+        message: "RSS collection completed"
+      });
+    }
+
     // Serve the website
     return env.ASSETS.fetch(request);
   },
 
-  // Automatically collect content every two hours
+  // Automatic collection every two hours
   async scheduled(event, env, ctx) {
     ctx.waitUntil(collectArticles(env));
   }
@@ -49,7 +75,7 @@ async function collectArticles(env) {
       const response = await fetch(feed.url);
 
       if (!response.ok) {
-        console.error("Feed request failed:", feed.name, response.status);
+        console.error("Feed failed:", feed.name, response.status);
         continue;
       }
 
@@ -63,14 +89,14 @@ async function collectArticles(env) {
 
         if (!title || !link) continue;
 
-        // Check whether this article already exists
+        // Prevent duplicate articles
         const existing = await env.DB.prepare(
           "SELECT id FROM articles WHERE url = ? LIMIT 1"
         ).bind(link).first();
 
         if (existing) continue;
 
-        // Save and publish the article
+        // Save article as published
         await env.DB.prepare(
           `INSERT INTO articles
           (title, summary, content, url, source_name, category, status, published_at)
