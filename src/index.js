@@ -21,6 +21,7 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // Get published articles
     if (url.pathname === "/api/articles") {
       const { results } = await env.DB.prepare(
         `SELECT * FROM articles
@@ -32,9 +33,11 @@ export default {
       return Response.json(results);
     }
 
+    // Serve the website
     return env.ASSETS.fetch(request);
   },
 
+  // Automatically collect content every two hours
   async scheduled(event, env, ctx) {
     ctx.waitUntil(collectArticles(env));
   }
@@ -43,13 +46,12 @@ export default {
 async function collectArticles(env) {
   for (const feed of FEEDS) {
     try {
-      const response = await fetch(feed.url, {
-        headers: {
-          "User-Agent": "JeezyDropz Content Collector/1.0"
-        }
-      });
+      const response = await fetch(feed.url);
 
-      if (!response.ok) continue;
+      if (!response.ok) {
+        console.error("Feed request failed:", feed.name, response.status);
+        continue;
+      }
 
       const xml = await response.text();
       const items = xml.match(/<item[\s\S]*?<\/item>/gi) || [];
@@ -61,12 +63,14 @@ async function collectArticles(env) {
 
         if (!title || !link) continue;
 
+        // Check whether this article already exists
         const existing = await env.DB.prepare(
           "SELECT id FROM articles WHERE url = ? LIMIT 1"
         ).bind(link).first();
 
         if (existing) continue;
 
+        // Save and publish the article
         await env.DB.prepare(
           `INSERT INTO articles
           (title, summary, content, url, source_name, category, status, published_at)
@@ -81,7 +85,7 @@ async function collectArticles(env) {
         ).run();
       }
     } catch (error) {
-      console.error(`Feed failed: ${feed.name}`, error);
+      console.error("Feed failed:", feed.name, error);
     }
   }
 }
