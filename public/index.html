@@ -563,40 +563,148 @@ footer {
 
 </main>
 
-<footer>
-    <div class="container footer-content">
-        <p>© <span id="year"></span> JeezyDropz. Gaming • Web3 • Daily Alpha.</p>
-
-        <div class="socials">
-            <a href="https://x.com/JeezyDropz" target="_blank">X / Twitter</a>
-            <a href="https://www.youtube.com/@JeezyGamezz" target="_blank">YouTube</a>
-            <a href="#home">Back to Top ↑</a>
-        </div>
-    </div>
-</footer>
-
 <script>
 document.getElementById("year").textContent =
     new Date().getFullYear();
 </script>
 
-<section id="latest-updates" style="padding:40px 20px; max-width:1200px; margin:auto;">
-  <h2 style="color:#00cfff; text-align:center; font-size:28px;">
-    Latest JeezyDropz Updates
-  </h2>
 
-  <p style="text-align:center; color:#aaa;">
-    Gaming news, releases, playtests and Web3 updates.
-  </p>
+<section id="latest-updates" class="updates-section">
+  <div class="updates-heading">
+    <h2>Latest JeezyDropz Updates</h2>
+    <p>Gaming news, releases, playtests and Web3 updates.</p>
+  </div>
 
-  <div id="articles-container" style="
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    margin-top:30px;">
-    <p style="color:#aaa;">Loading latest updates...</p>
+  <div class="updates-carousel">
+    <button class="carousel-btn" id="updates-left" aria-label="Scroll left">
+      &#10094;
+    </button>
+
+    <div id="articles-container" class="articles-track">
+      <p class="updates-loading">Loading latest updates...</p>
+    </div>
+
+    <button class="carousel-btn" id="updates-right" aria-label="Scroll right">
+      &#10095;
+    </button>
   </div>
 </section>
+
+<style>
+.updates-section {
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 40px 20px;
+  overflow: hidden;
+}
+
+.updates-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.updates-heading h2 {
+  color: #00cfff;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.updates-heading p {
+  color: #aaa;
+}
+
+.updates-carousel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.articles-track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #087cff #101d35;
+  padding: 10px 4px 20px;
+  flex: 1;
+}
+
+.article-card {
+  flex: 0 0 280px;
+  background: #101d35;
+  border: 1px solid #087cff;
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  min-height: 210px;
+  box-shadow: 0 0 12px rgba(0, 140, 255, 0.12);
+}
+
+.article-card h3 {
+  color: white;
+  font-size: 18px;
+  margin: 12px 0;
+}
+
+.article-card p {
+  color: #bbb;
+  line-height: 1.6;
+}
+
+.article-category {
+  color: #00cfff;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.article-source {
+  color: #888;
+  font-size: 12px;
+}
+
+.article-card a {
+  color: #00cfff;
+  text-decoration: none;
+}
+
+.article-card a:hover {
+  text-decoration: underline;
+}
+
+.carousel-btn {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #087cff;
+  border-radius: 50%;
+  background: #101d35;
+  color: #00cfff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.carousel-btn:hover {
+  background: #087cff;
+  color: white;
+}
+
+.updates-loading {
+  color: #aaa;
+}
+
+@media (max-width: 600px) {
+  .article-card {
+    flex-basis: 240px;
+  }
+
+  .carousel-btn {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+  }
+}
+</style>
 
 <script>
 async function loadJeezyArticles() {
@@ -611,40 +719,29 @@ async function loadJeezyArticles() {
 
     if (!articles.length) {
       container.innerHTML =
-        '<p style="color:#aaa;">New JeezyDropz updates coming soon!</p>';
+        '<p class="updates-loading">New JeezyDropz updates coming soon!</p>';
       return;
     }
 
     container.innerHTML = articles.map(article => `
-      <article style="
-        background:#101d35;
-        border:1px solid #087cff;
-        border-radius:12px;
-        padding:20px;
-        color:white;">
-
-        <small style="color:#00cfff;">
+      <article class="article-card">
+        <span class="article-category">
           ${escapeHTML(article.category || "Latest Updates")}
-        </small>
+        </span>
 
-        <h3 style="margin:12px 0;color:white;">
-          ${escapeHTML(article.title)}
-        </h3>
+        <h3>${escapeHTML(article.title)}</h3>
 
-        <p style="color:#bbb;line-height:1.6;">
-          ${escapeHTML(article.summary || "")}
-        </p>
+        <p>${escapeHTML(article.summary || "")}</p>
 
-        <small style="color:#888;">
+        <span class="article-source">
           ${escapeHTML(article.source_name || "JeezyDropz")}
-        </small>
+        </span>
 
         ${article.url ? `
           <p>
             <a href="${safeURL(article.url)}"
                target="_blank"
-               rel="noopener noreferrer"
-               style="color:#00cfff;">
+               rel="noopener noreferrer">
               Read more →
             </a>
           </p>` : ""}
@@ -653,7 +750,7 @@ async function loadJeezyArticles() {
 
   } catch (error) {
     container.innerHTML =
-      '<p style="color:#ff7777;">Updates are temporarily unavailable.</p>';
+      '<p class="updates-loading">Updates are temporarily unavailable.</p>';
   }
 }
 
@@ -678,8 +775,34 @@ function safeURL(value) {
   }
 }
 
+document.getElementById("updates-left").addEventListener("click", () => {
+  document.getElementById("articles-container").scrollBy({
+    left: -600,
+    behavior: "smooth"
+  });
+});
+
+document.getElementById("updates-right").addEventListener("click", () => {
+  document.getElementById("articles-container").scrollBy({
+    left: 600,
+    behavior: "smooth"
+  });
+});
+
 loadJeezyArticles();
 </script>
+    
+<footer>
+    <div class="container footer-content">
+        <p>© <span id="year"></span> JeezyDropz. Gaming • Web3 • Daily Alpha.</p>
+
+        <div class="socials">
+            <a href="https://x.com/JeezyDropz" target="_blank">X / Twitter</a>
+            <a href="https://www.youtube.com/@JeezyGamezz" target="_blank">YouTube</a>
+            <a href="#home">Back to Top ↑</a>
+        </div>
+    </div>
+</footer>
 
 </body>
 </html>
