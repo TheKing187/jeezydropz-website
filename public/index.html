@@ -569,6 +569,7 @@ document.getElementById("year").textContent =
 </script>
 
 
+
 <section id="latest-updates" class="updates-section">
   <div class="updates-heading">
     <h2>Latest JeezyDropz Updates</h2>
@@ -635,37 +636,74 @@ document.getElementById("year").textContent =
   background: #101d35;
   border: 1px solid #087cff;
   border-radius: 12px;
-  padding: 20px;
+  overflow: hidden;
   color: white;
-  min-height: 210px;
+  min-height: 330px;
   box-shadow: 0 0 12px rgba(0, 140, 255, 0.12);
 }
 
-.article-card h3 {
-  color: white;
-  font-size: 18px;
-  margin: 12px 0;
+.article-image,
+.article-image-placeholder {
+  width: 100%;
+  height: 155px;
+  object-fit: cover;
+  display: block;
 }
 
-.article-card p {
-  color: #bbb;
-  line-height: 1.6;
+.article-image-placeholder {
+  background: linear-gradient(135deg, #101d35, #073b70);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00cfff;
+  font-size: 38px;
+}
+
+.article-details {
+  padding: 16px;
+}
+
+.article-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
 .article-category {
   color: #00cfff;
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
+  font-weight: bold;
+}
+
+.article-date {
+  color: #888;
+  font-size: 11px;
+}
+
+.article-card h3 {
+  color: white;
+  font-size: 17px;
+  margin: 8px 0 10px;
+}
+
+.article-card p {
+  color: #bbb;
+  line-height: 1.5;
+  font-size: 13px;
 }
 
 .article-source {
   color: #888;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .article-card a {
   color: #00cfff;
   text-decoration: none;
+  font-weight: bold;
 }
 
 .article-card a:hover {
@@ -723,30 +761,57 @@ async function loadJeezyArticles() {
       return;
     }
 
-    container.innerHTML = articles.map(article => `
-      <article class="article-card">
-        <span class="article-category">
-          ${escapeHTML(article.category || "Latest Updates")}
-        </span>
+    container.innerHTML = articles.map(article => {
+      const image = safeURL(article.image_url);
+      const dateValue = article.published_at || article.created_at;
+      const date = dateValue
+        ? new Date(dateValue.replace(" ", "T")).toLocaleDateString()
+        : "";
 
-        <h3>${escapeHTML(article.title)}</h3>
+      return `
+        <article class="article-card">
 
-        <p>${escapeHTML(article.summary || "")}</p>
+          ${image ? `
+            <img class="article-image"
+                 src="${image}"
+                 alt="${escapeHTML(article.title)}"
+                 loading="lazy"
+                 onerror="this.style.display='none'">
+          ` : `
+            <div class="article-image-placeholder">🎮</div>
+          `}
 
-        <span class="article-source">
-          ${escapeHTML(article.source_name || "JeezyDropz")}
-        </span>
+          <div class="article-details">
+            <div class="article-meta">
+              <span class="article-category">
+                ${escapeHTML(article.category || "Latest Updates")}
+              </span>
 
-        ${article.url ? `
-          <p>
-            <a href="${safeURL(article.url)}"
-               target="_blank"
-               rel="noopener noreferrer">
-              Read more →
-            </a>
-          </p>` : ""}
-      </article>
-    `).join("");
+              <span class="article-date">
+                ${escapeHTML(date)}
+              </span>
+            </div>
+
+            <h3>${escapeHTML(article.title)}</h3>
+
+            <p>${escapeHTML(article.summary || "")}</p>
+
+            <span class="article-source">
+              ${escapeHTML(article.source_name || "JeezyDropz")}
+            </span>
+
+            ${article.url ? `
+              <p>
+                <a href="${safeURL(article.url)}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                  Read more →
+                </a>
+              </p>` : ""}
+          </div>
+        </article>
+      `;
+    }).join("");
 
   } catch (error) {
     container.innerHTML =
@@ -765,13 +830,16 @@ function escapeHTML(value) {
 }
 
 function safeURL(value) {
+  if (!value) return "";
+
   try {
     const url = new URL(value, window.location.origin);
+
     return ["https:", "http:"].includes(url.protocol)
       ? escapeHTML(url.href)
-      : "#";
+      : "";
   } catch {
-    return "#";
+    return "";
   }
 }
 
@@ -791,6 +859,7 @@ document.getElementById("updates-right").addEventListener("click", () => {
 
 loadJeezyArticles();
 </script>
+
     
 <footer>
     <div class="container footer-content">
